@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, useContext, useId, useState } from "react";
+import { createContext, useContext } from "react";
+import { useRawId } from "@/raw/internal/useRawId";
 
 type PopoverRootContextType = {
   id: string;
@@ -21,7 +22,7 @@ function usePopoverRootContext() {
 }
 
 export function PopoverRoot({ children }: { children: React.ReactNode }) {
-  const id = useId();
+  const id = useRawId();
 
   return (
     <PopoverRootContext.Provider value={{ id }}>
@@ -33,7 +34,7 @@ export function PopoverRoot({ children }: { children: React.ReactNode }) {
 export function PopoverTrigger({
   children,
   ...props
-}: React.ComponentProps<"button">) {
+}: Omit<React.ComponentProps<"button">, "popoverTarget">) {
   const { id } = usePopoverRootContext();
 
   return (
@@ -43,13 +44,27 @@ export function PopoverTrigger({
   );
 }
 
+export function PopoverClose({
+  children,
+  ...props
+}: Omit<
+  React.ComponentProps<"button">,
+  "popoverTarget" | "popoverTargetAction"
+>) {
+  const { id } = usePopoverRootContext();
+
+  return (
+    <button {...props} popoverTarget={id} popoverTargetAction="hide">
+      {children}
+    </button>
+  );
+}
+
 export function PopoverPopup({
   children,
   ...props
-}: React.ComponentProps<"div">) {
+}: Omit<React.ComponentProps<"div">, "popover">) {
   const { id } = usePopoverRootContext();
-
-  if (!open) return null;
 
   return (
     <div {...props} id={id} popover="auto">
