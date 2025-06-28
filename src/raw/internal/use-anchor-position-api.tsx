@@ -18,7 +18,7 @@ type AnchorPositionApiReturn = {
 export function useAnchorPositionApi({
   anchorId,
   area = "bottom",
-  tryFallbacks = "flip-block, flip-inline",
+  tryFallbacks = "flip-block, flip-inline, flip-start",
   tryOrder = "most-width",
 }: AnchorOptions): AnchorPositionApiReturn {
   const internalId = `--${useId("raw-ui-anchor")}`;

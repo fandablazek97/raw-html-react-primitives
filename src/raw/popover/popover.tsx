@@ -3,12 +3,25 @@
 import { createContext, useContext } from "react";
 import { useId } from "@/raw/internal/use-id";
 import { useAnchorPositionApi } from "@/raw/internal/use-anchor-position-api";
+import { usePopoverApi } from "@/raw/internal/use-popover-api";
 import type { AnchorOptions } from "@/raw/internal/use-anchor-position-api";
+import type { PopoverOptions } from "@/raw/internal/use-popover-api";
 
 type PopoverRootContextType = {
   id: string;
   anchorStyles: React.CSSProperties;
   targetStyles: React.CSSProperties;
+  showPopover: () => void;
+  hidePopover: () => void;
+  togglePopover: () => void;
+  triggerProps: {
+    popoverTarget: string;
+    popoverTargetAction?: "toggle" | "show" | "hide";
+  };
+  popoverProps: {
+    id: string;
+    popover: "auto" | "manual";
+  };
 };
 
 const PopoverRootContext = createContext<PopoverRootContextType | null>(null);
@@ -29,20 +42,49 @@ export function PopoverRoot({
   children,
   anchor = "bottom",
   flip = true,
+  mode = "auto",
+  popoverId,
 }: {
   children: React.ReactNode;
   anchor?: AnchorOptions["area"];
   flip?: boolean;
+  mode?: PopoverOptions["mode"];
+  popoverId?: string;
 }) {
   const id = useId("raw-ui-popover-");
+  
+  // Use the popover API hook
+  const {
+    popoverId: hookPopoverId,
+    popoverProps,
+    triggerProps,
+    showPopover,
+    hidePopover,
+    togglePopover,
+  } = usePopoverApi({
+    popoverId: popoverId || id,
+    mode,
+  });
 
+  // Use anchor positioning for the popover
   const { anchorStyles, targetStyles } = useAnchorPositionApi({
     area: anchor,
-    anchorId: id,
+    anchorId: hookPopoverId,
   });
 
   return (
-    <PopoverRootContext.Provider value={{ id, anchorStyles, targetStyles }}>
+    <PopoverRootContext.Provider 
+      value={{ 
+        id: hookPopoverId, 
+        anchorStyles, 
+        targetStyles,
+        showPopover,
+        hidePopover,
+        togglePopover,
+        triggerProps,
+        popoverProps,
+      }}
+    >
       {children}
     </PopoverRootContext.Provider>
   );
@@ -51,12 +93,20 @@ export function PopoverRoot({
 export function PopoverTrigger({
   children,
   style,
+  onClick,
   ...props
 }: Omit<React.ComponentProps<"button">, "popoverTarget">) {
-  const { id, anchorStyles } = usePopoverRootContext();
+  const { anchorStyles, triggerProps } = usePopoverRootContext();
 
   return (
-    <button {...props} popoverTarget={id} style={{ ...anchorStyles, ...style }}>
+    <button 
+      {...props} 
+      {...triggerProps}
+      onClick={(e) => {
+        onClick?.(e);
+      }}
+      style={{ ...anchorStyles, ...style }}
+    >
       {children}
     </button>
   );
@@ -64,15 +114,22 @@ export function PopoverTrigger({
 
 export function PopoverClose({
   children,
+  onClick,
   ...props
 }: Omit<
   React.ComponentProps<"button">,
   "popoverTarget" | "popoverTargetAction"
 >) {
-  const { id } = usePopoverRootContext();
+  const { hidePopover } = usePopoverRootContext();
 
   return (
-    <button {...props} popoverTarget={id} popoverTargetAction="hide">
+    <button 
+      {...props} 
+      onClick={(e) => {
+        onClick?.(e);
+        hidePopover();
+      }}
+    >
       {children}
     </button>
   );
@@ -83,13 +140,12 @@ export function PopoverPanel({
   style,
   ...props
 }: Omit<React.ComponentProps<"div">, "popover">) {
-  const { id, targetStyles } = usePopoverRootContext();
+  const { targetStyles, popoverProps } = usePopoverRootContext();
 
   return (
     <div
       {...props}
-      id={id}
-      popover="auto"
+      {...popoverProps}
       style={{ ...targetStyles, ...style }}
     >
       {children}
