@@ -7,7 +7,7 @@ export type PopoverOptions = {
   mode?: "auto" | "manual";
 };
 
-type PopoverApiReturn = {
+export type PopoverApiReturn = {
   popoverId: string;
   popoverProps: {
     id: string;
@@ -64,4 +64,4 @@ export function usePopoverApi({
     hidePopover,
     togglePopover,
   };
-} 
+}
