@@ -24,7 +24,9 @@ type PopoverRootContextType = {
   };
 };
 
-const PopoverRootContext = createContext<PopoverRootContextType | null>(null);
+const PopoverRootContext = createContext<PopoverRootContextType | undefined>(
+  undefined,
+);
 
 function usePopoverRootContext() {
   const context = useContext(PopoverRootContext);

@@ -8,7 +8,9 @@ type ComponentRootContextType = {
   // TODO: Add other shared state properties here
 };
 
-const ComponentRootContext = createContext<ComponentRootContextType | null>(null);
+const ComponentRootContext = createContext<
+  ComponentRootContextType | undefined
+>(undefined);
 
 function useComponentRootContext() {
   const context = useContext(ComponentRootContext);
@@ -40,11 +42,7 @@ export function ComponentTrigger({
 }: React.ComponentProps<"button">) {
   const { id } = useComponentRootContext();
 
-  return (
-    <button {...props}>
-      {children}
-    </button>
-  );
+  return <button {...props}>{children}</button>;
 }
 
 export function ComponentContent({
@@ -58,4 +56,4 @@ export function ComponentContent({
       {children}
     </div>
   );
-} 
+}
