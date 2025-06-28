@@ -52,7 +52,7 @@ export function PopoverRoot({
   popoverId?: string;
 }) {
   const id = useId("raw-ui-popover-");
-  
+
   // Use the popover API hook
   const {
     popoverId: hookPopoverId,
@@ -70,13 +70,14 @@ export function PopoverRoot({
   const { anchorStyles, targetStyles } = useAnchorPositionApi({
     area: anchor,
     anchorId: hookPopoverId,
+    tryFallbacks: flip ? "flip-block, flip-inline, flip-start" : "none",
   });
 
   return (
-    <PopoverRootContext.Provider 
-      value={{ 
-        id: hookPopoverId, 
-        anchorStyles, 
+    <PopoverRootContext.Provider
+      value={{
+        id: hookPopoverId,
+        anchorStyles,
         targetStyles,
         showPopover,
         hidePopover,
@@ -99,8 +100,8 @@ export function PopoverTrigger({
   const { anchorStyles, triggerProps } = usePopoverRootContext();
 
   return (
-    <button 
-      {...props} 
+    <button
+      {...props}
       {...triggerProps}
       onClick={(e) => {
         onClick?.(e);
@@ -123,8 +124,8 @@ export function PopoverClose({
   const { hidePopover } = usePopoverRootContext();
 
   return (
-    <button 
-      {...props} 
+    <button
+      {...props}
       onClick={(e) => {
         onClick?.(e);
         hidePopover();
@@ -143,11 +144,7 @@ export function PopoverPanel({
   const { targetStyles, popoverProps } = usePopoverRootContext();
 
   return (
-    <div
-      {...props}
-      {...popoverProps}
-      style={{ ...targetStyles, ...style }}
-    >
+    <div {...props} {...popoverProps} style={{ ...targetStyles, ...style }}>
       {children}
     </div>
   );
