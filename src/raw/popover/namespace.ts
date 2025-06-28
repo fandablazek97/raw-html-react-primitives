@@ -1,6 +1,6 @@
 export {
   PopoverRoot as Root,
   PopoverTrigger as Trigger,
-  PopoverPopup as Popup,
+  PopoverPanel as Panel,
   PopoverClose as Close,
 } from "./popover";

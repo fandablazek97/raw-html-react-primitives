@@ -1,7 +1,7 @@
 export {
   PopoverRoot,
   PopoverTrigger,
-  PopoverPopup,
+  PopoverPanel,
   PopoverClose,
 } from "./popover";
 
