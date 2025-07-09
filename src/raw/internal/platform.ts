@@ -28,6 +28,7 @@ function matchPlatform(pattern: RegExp): boolean {
     return pattern.test(userAgentData.platform);
   }
 
+  // Fallback to traditional platform
   return pattern.test(nav.platform);
 }
 
