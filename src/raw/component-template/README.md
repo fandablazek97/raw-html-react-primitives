@@ -40,16 +40,20 @@ ComponentName/
 
 ```tsx
 // Named imports
-import { ComponentRoot, ComponentTrigger, ComponentContent } from './component-name';
+import {
+  ComponentRoot,
+  ComponentTrigger,
+  ComponentContent,
+} from "./component-name";
 
 // Or namespace imports
-import { Component } from './component-name';
+import { Component } from "./component-name";
 
 // Usage
 <Component.Root>
   <Component.Trigger>Open</Component.Trigger>
   <Component.Content>Content here</Component.Content>
-</Component.Root>
+</Component.Root>;
 ```
 
 ## TODO Checklist
@@ -61,4 +65,4 @@ import { Component } from './component-name';
 - [ ] Update the component parts (Trigger, Content, etc.) to match your needs
 - [ ] Add any additional component parts
 - [ ] Update exports in index.ts and namespace.ts
-- [ ] Remove this README or replace with component-specific documentation 
+- [ ] Remove this README or replace with component-specific documentation

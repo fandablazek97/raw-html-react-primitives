@@ -7,4 +7,6 @@ export {
   DialogClose,
 } from "./dialog";
 
-export * as Dialog from "./namespace"; 
+export { useDialog } from "./use-dialog";
+
+export * as Dialog from "./namespace";

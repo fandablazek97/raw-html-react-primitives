@@ -11,13 +11,9 @@ export type PositionAnchorValue = "auto" | string;
 
 // Position area types based on CSS Anchor Positioning specification
 // Physical keywords
-export type PositionAreaPhysical =
-  | "top"
-  | "bottom" 
-  | "left"
-  | "right";
+export type PositionAreaPhysical = "top" | "bottom" | "left" | "right";
 
-// Logical keywords  
+// Logical keywords
 export type PositionAreaLogical =
   | "block-start"
   | "block-end"
@@ -27,11 +23,7 @@ export type PositionAreaLogical =
   | "end";
 
 // Coordinate keywords
-export type PositionAreaCoordinate =
-  | "x-start"
-  | "x-end"
-  | "y-start"
-  | "y-end";
+export type PositionAreaCoordinate = "x-start" | "x-end" | "y-start" | "y-end";
 
 // Center keyword (works for both axes)
 export type PositionAreaCenter = "center";
@@ -59,7 +51,7 @@ export type PositionAreaBase =
 export type PositionAreaSpan =
   | "span-top"
   | "span-bottom"
-  | "span-left" 
+  | "span-left"
   | "span-right"
   | "span-block-start"
   | "span-block-end"
@@ -74,9 +66,7 @@ export type PositionAreaSpan =
   | "span-all";
 
 // All position area keywords
-export type PositionAreaKeyword = 
-  | PositionAreaBase
-  | PositionAreaSpan;
+export type PositionAreaKeyword = PositionAreaBase | PositionAreaSpan;
 
 export type PositionAreaValue =
   | "none"
@@ -99,10 +89,7 @@ export type PositionTryOrderValue =
   | "most-inline-size";
 
 // Try tactic types from the spec
-export type TryTacticValue =
-  | "flip-block"
-  | "flip-inline"
-  | "flip-start";
+export type TryTacticValue = "flip-block" | "flip-inline" | "flip-start";
 
 // Position try fallbacks types - spec: "none | [ [<dashed-ident> | <try-tactic>] | <'position-area'> ]#"
 export type PositionTryFallbackValue =
@@ -122,7 +109,7 @@ export type CSSPropertiesExtended = CSSProperties & {
   // Anchor naming and scoping
   anchorName?: AnchorNameValue;
   anchorScope?: AnchorScopeValue;
-  
+
   // Anchor positioning
   positionAnchor?: PositionAnchorValue;
   positionArea?: PositionAreaValue;

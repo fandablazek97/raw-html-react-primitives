@@ -1,39 +1,39 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Dialog Scroll Test</title>
-        <style>
-            body {
-                margin: 0;
-                font-family: sans-serif;
-            }
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dialog Scroll Test</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+      }
 
-            .spacer {
-                height: 2000px;
-                background: linear-gradient(white, lightgray);
-            }
+      .spacer {
+        height: 2000px;
+        background: linear-gradient(white, lightgray);
+      }
 
-            dialog {
-                padding: 2em;
-                border: none;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            }
-        </style>
-    </head>
-    <body>
-        <button onclick="document.getElementById('testDialog').showModal()">
-            Open Modal Dialog
-        </button>
+      dialog {
+        padding: 2em;
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <button onclick="document.getElementById('testDialog').showModal()">
+      Open Modal Dialog
+    </button>
 
-        <dialog id="testDialog">
-            <p>This is a modal dialog. Scroll should be locked.</p>
-            <button onclick="document.getElementById('testDialog').close()">
-                Close
-            </button>
-        </dialog>
+    <dialog id="testDialog">
+      <p>This is a modal dialog. Scroll should be locked.</p>
+      <button onclick="document.getElementById('testDialog').close()">
+        Close
+      </button>
+    </dialog>
 
-        <div class="spacer"></div>
-    </body>
+    <div class="spacer"></div>
+  </body>
 </html>

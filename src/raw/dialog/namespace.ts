@@ -5,4 +5,6 @@ export {
   DialogDescription as Description,
   DialogPanel as Panel,
   DialogClose as Close,
-} from "./dialog"; 
+} from "./dialog";
+
+export { useDialog } from "./use-dialog";

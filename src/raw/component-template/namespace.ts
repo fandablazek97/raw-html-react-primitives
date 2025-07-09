@@ -3,4 +3,4 @@ export {
   ComponentRoot as Root,
   ComponentTrigger as Trigger,
   ComponentContent as Content,
-} from "./component"; 
+} from "./component";
