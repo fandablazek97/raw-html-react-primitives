@@ -1,7 +1,7 @@
 "use client";
 
 import { useDialogApi } from "@/raw/internal/use-dialog-api";
-import { useScrollLock } from "../internal/use-scroll-lock";
+import { scrollLock } from "../internal/scroll-lock";
 
 export function useDialog({
   dialogId,
@@ -22,8 +22,6 @@ export function useDialog({
     dialogId,
     modal,
   });
-
-  const scrollLock = useScrollLock();
 
   const showDialog = () => {
     if (modal) {

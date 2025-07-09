@@ -156,7 +156,7 @@ function reset() {
   }
 }
 
-const scrollLock = {
+export const scrollLock = {
   lock: lockScroll,
   unlock: unlockScroll,
   isLocked: isScrollLocked,
@@ -165,7 +165,3 @@ const scrollLock = {
   getScrollbarWidth,
   getScrollbarHeight,
 };
-
-export function useScrollLock() {
-  return scrollLock;
-}
