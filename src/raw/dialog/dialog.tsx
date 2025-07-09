@@ -22,6 +22,7 @@ type DialogRootContextType = {
     "aria-describedby": string;
   };
   modal: boolean;
+  dismissable: boolean;
 };
 
 const DialogRootContext = createContext<DialogRootContextType | undefined>(
@@ -43,10 +44,12 @@ function useDialogRootContext() {
 export function DialogRoot({
   children,
   modal = true,
+  dismissable = true,
   dialogId: propDialogId,
 }: {
   children: React.ReactNode;
   modal?: DialogOptions["modal"];
+  dismissable?: boolean;
   dialogId?: string;
 }) {
   const id = useId("raw-ui-dialog-");
@@ -83,6 +86,7 @@ export function DialogRoot({
           "aria-describedby": descriptionId,
         },
         modal,
+        dismissable,
       }}
     >
       {children}
@@ -112,12 +116,41 @@ export function DialogTrigger({
 
 export function DialogPanel({
   children,
+  onClick,
   ...props
 }: React.ComponentProps<"dialog">) {
-  const { dialogProps } = useDialogRootContext();
+  const { dialogProps, dismissable, closeDialog } = useDialogRootContext();
+
+  function handleClick(event: React.MouseEvent<HTMLDialogElement>) {
+    if (!dismissable) return;
+
+    const dialog = event.currentTarget;
+    const rect = dialog.getBoundingClientRect();
+
+    // Check if the click coordinates are outside the rectangle
+    const isInDialog =
+      rect.top <= event.clientY &&
+      event.clientY <= rect.top + rect.height &&
+      rect.left <= event.clientX &&
+      event.clientX <= rect.left + rect.width;
+
+    // If the click is not in the dialog, close it
+    if (!isInDialog) {
+      closeDialog();
+      // Prevents event propagation to parent elements
+      event.stopPropagation();
+    }
+  }
 
   return (
-    <dialog {...props} {...dialogProps}>
+    <dialog
+      {...props}
+      {...dialogProps}
+      onClick={(e) => {
+        onClick?.(e);
+        handleClick(e);
+      }}
+    >
       {children}
     </dialog>
   );
@@ -157,7 +190,7 @@ export function DialogClose({
 }: React.ComponentProps<"button"> & {
   returnValue?: string;
 }) {
-  const { closeDialog } = useDialogRootContext();
+  const { closeDialog, dialogId } = useDialogRootContext();
 
   return (
     <button

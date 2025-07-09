@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dialog Backdrop Test</title>
+  </head>
+  <body>
+    <dialog id="myDialog">
+      <div>
+        <h2>Dialog Title</h2>
+        <p>This is the content of the dialog.</p>
+        <button id="closeButton">Close</button>
+      </div>
+    </dialog>
+
+    <button id="openButton">Open Dialog</button>
+
+    <script>
+      const myDialog = document.getElementById("myDialog");
+      const openButton = document.getElementById("openButton");
+      const closeButton = document.getElementById("closeButton");
+
+      openButton.addEventListener("click", () => {
+        myDialog.showModal();
+      });
+
+      myDialog.addEventListener("click", (event) => {
+        // Get the bounding rectangle of the dialog window
+        const rect = myDialog.getBoundingClientRect();
+
+        // Check if the click coordinates are outside the rectangle
+        const isInDialog =
+          rect.top <= event.clientY &&
+          event.clientY <= rect.top + rect.height &&
+          rect.left <= event.clientX &&
+          event.clientX <= rect.left + rect.width;
+
+        // If the click is not in the dialog, close it
+        if (!isInDialog) {
+          myDialog.close();
+        }
+      });
+
+      closeButton.addEventListener("click", () => {
+        myDialog.close();
+      });
+    </script>
+  </body>
+</html>

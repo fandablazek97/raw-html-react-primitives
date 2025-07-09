@@ -39,7 +39,10 @@ export function useDialog({
   }
 
   function toggleDialog() {
-    if (scrollLock.isLocked()) {
+    const element = document.getElementById(hookDialogId) as HTMLDialogElement;
+    if (!element) return;
+
+    if (element.open) {
       closeDialog();
     } else {
       showDialog();

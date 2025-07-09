@@ -55,13 +55,6 @@ function lockScroll() {
     return;
   }
 
-  // If the site author already hid overflow on <html>, respect it and bail out
-  const htmlStyle = getComputedStyle(doc);
-  const htmlOverflowY = htmlStyle.overflowY;
-  if (htmlOverflowY === "hidden" || htmlOverflowY === "clip") {
-    return;
-  }
-
   // Increment lock count
   locks++;
 
