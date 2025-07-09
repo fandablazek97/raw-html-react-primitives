@@ -2,8 +2,8 @@
 
 import { createContext, useContext } from "react";
 import { useId } from "@/raw/internal/use-id";
-import { useDialogApi } from "@/raw/internal/use-dialog-api";
 import type { DialogOptions } from "@/raw/internal/use-dialog-api";
+import { useDialog } from "./use-dialog";
 
 type DialogRootContextType = {
   dialogId: string;
@@ -43,7 +43,7 @@ function useDialogRootContext() {
 export function DialogRoot({
   children,
   modal = true,
-  dialogId,
+  dialogId: propDialogId,
 }: {
   children: React.ReactNode;
   modal?: DialogOptions["modal"];
@@ -53,24 +53,23 @@ export function DialogRoot({
   const titleId = useId("raw-ui-dialog-title-");
   const descriptionId = useId("raw-ui-dialog-description-");
 
-  // Use the dialog API hook
   const {
-    dialogId: hookDialogId,
+    dialogId,
     dialogProps,
     triggerProps,
     showDialog,
     showModalDialog,
     closeDialog,
     toggleDialog,
-  } = useDialogApi({
-    dialogId: dialogId || id,
+  } = useDialog({
+    dialogId: propDialogId || id,
     modal,
   });
 
   return (
     <DialogRootContext.Provider
       value={{
-        dialogId: hookDialogId,
+        dialogId,
         titleId,
         descriptionId,
         showDialog,
