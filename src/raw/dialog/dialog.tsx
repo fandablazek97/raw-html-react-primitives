@@ -1,8 +1,8 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { useId } from "@/raw/internal/use-id";
-import type { DialogOptions } from "@/raw/internal/use-dialog-api";
+import { useId } from "../internal/use-id";
+import type { DialogOptions } from "../internal/use-dialog-api";
 import { useDialog } from "./use-dialog";
 
 type DialogRootContextType = {
