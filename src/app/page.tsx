@@ -133,7 +133,7 @@ export default function Home() {
                     <Dialog.Trigger className="bg-indigo-500 text-white px-3 py-1 text-sm rounded-sm">
                       Open Nested Dialog
                     </Dialog.Trigger>
-                    <Dialog.Panel className="bg-yellow-50 border border-yellow-300 shadow-2xl m-auto rounded-lg p-4 max-w-sm max-h-fit">
+                    <Dialog.Panel className="bg-yellow-50 border border-yellow-300 shadow-2xl m-auto rounded-lg p-4 max-w-sm max-h-fit backdrop:bg-transparent">
                       <div className="space-y-3">
                         <Dialog.Title className="text-lg font-bold">
                           Nested Dialog
