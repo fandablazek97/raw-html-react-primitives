@@ -33,7 +33,7 @@ export default function Home() {
               <Dialog.Trigger className="bg-green-600 text-white px-4 py-2 rounded-sm">
                 Open Modal Dialog (long content)
               </Dialog.Trigger>
-              <Dialog.Panel className="bg-white border border-gray-300 shadow-2xl m-auto rounded-xl p-6 max-w-md max-h-fit overflow-y-auto">
+              <Dialog.Panel className="bg-white border border-gray-300 shadow-2xl m-auto rounded-xl p-6 max-w-md max-h-[85vh] overflow-y-auto">
                 <div className="space-y-4">
                   <Dialog.Title className="text-xl font-bold">
                     Confirm Action
