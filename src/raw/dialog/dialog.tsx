@@ -121,20 +121,24 @@ export function DialogPanel({
 }: React.ComponentProps<"dialog">) {
   const { dialogProps, dismissable, closeDialog } = useDialogRootContext();
 
-  function handleClick(event: React.MouseEvent<HTMLDialogElement>) {
+  function handleClose(event: React.MouseEvent<HTMLDialogElement>) {
     if (!dismissable) return;
 
     const dialog = event.currentTarget;
+
+    // Fixed bug: Prevent closing if the dialog is already closed.
+    if (!dialog.open) {
+      return;
+    }
+
     const rect = dialog.getBoundingClientRect();
 
-    // Check if the click coordinates are outside the rectangle
     const isInDialog =
       rect.top <= event.clientY &&
       event.clientY <= rect.top + rect.height &&
       rect.left <= event.clientX &&
       event.clientX <= rect.left + rect.width;
 
-    // If the click is not in the dialog, close it
     if (!isInDialog) {
       closeDialog();
       // Prevents event propagation to parent elements
@@ -148,7 +152,7 @@ export function DialogPanel({
       {...dialogProps}
       onClick={(e) => {
         onClick?.(e);
-        handleClick(e);
+        handleClose(e);
       }}
     >
       {children}
