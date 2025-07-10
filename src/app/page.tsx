@@ -31,9 +31,9 @@ export default function Home() {
             <h3 className="text-lg font-semibold">New Dialog Component</h3>
             <Dialog.Root modal>
               <Dialog.Trigger className="bg-green-600 text-white px-4 py-2 rounded-sm">
-                Open Modal Dialog
+                Open Modal Dialog (long content)
               </Dialog.Trigger>
-              <Dialog.Panel className="bg-white border border-gray-300 shadow-2xl m-auto rounded-xl p-6 max-w-md max-h-fit">
+              <Dialog.Panel className="bg-white border border-gray-300 shadow-2xl m-auto rounded-xl p-6 max-w-md max-h-fit overflow-y-auto">
                 <div className="space-y-4">
                   <Dialog.Title className="text-xl font-bold">
                     Confirm Action
@@ -41,7 +41,15 @@ export default function Home() {
                   <Dialog.Description>
                     This is a modal dialog using native HTML dialog element with
                     modern DX. The title and description are properly linked
-                    with ARIA attributes for accessibility.
+                    with ARIA attributes for accessibility. This is a modal
+                    dialog using native HTML dialog element with modern DX. The
+                    title and description are properly linked with ARIA
+                    attributes for accessibility. This is a modal dialog using
+                    native HTML dialog element with modern DX. The title and
+                    description are properly linked with ARIA attributes for
+                    accessibility. This is a modal dialog using native HTML
+                    dialog element with modern DX. The title and description are
+                    properly linked with ARIA attributes for accessibility.
                   </Dialog.Description>
                   <div className="flex gap-2 justify-end">
                     <Dialog.Close
@@ -152,6 +160,112 @@ export default function Home() {
 
                   <div className="flex gap-2 justify-end mt-4">
                     <Dialog.Close className="px-3 py-1 text-sm bg-indigo-600 text-white rounded-sm hover:bg-indigo-700">
+                      Close Parent
+                    </Dialog.Close>
+                  </div>
+                </div>
+              </Dialog.Panel>
+            </Dialog.Root>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Complex Nested Dialogs</h3>
+            <Dialog.Root modal dismissable>
+              <Dialog.Trigger className="bg-red-600 text-white px-4 py-2 rounded-sm">
+                Open Parent Dialog
+              </Dialog.Trigger>
+              <Dialog.Panel className="bg-white border border-gray-300 shadow-2xl m-auto rounded-xl p-6 max-w-2xl max-h-fit">
+                <div className="space-y-4">
+                  <Dialog.Title className="text-xl font-bold">
+                    Parent Dialog
+                  </Dialog.Title>
+                  <Dialog.Description>
+                    This is the parent dialog. It contains three nested dialogs.
+                  </Dialog.Description>
+
+                  <div className="flex gap-4">
+                    {/* Nested Dialog 1 */}
+                    <Dialog.Root modal dismissable>
+                      <Dialog.Trigger className="bg-red-500 text-white px-3 py-1 text-sm rounded-sm">
+                        Open Nested 1
+                      </Dialog.Trigger>
+                      <Dialog.Panel className="bg-red-50 border border-red-300 shadow-2xl m-auto rounded-lg p-4 max-w-xs max-h-fit backdrop:bg-transparent">
+                        <div className="space-y-3">
+                          <Dialog.Title className="text-lg font-bold">
+                            Nested Dialog 1
+                          </Dialog.Title>
+                          <Dialog.Description className="text-sm">
+                            This is the first nested dialog.
+                          </Dialog.Description>
+                          {/* Nested Dialog 3 */}
+                          <Dialog.Root modal dismissable>
+                            <Dialog.Trigger className="bg-blue-500 text-white px-3 py-1 text-sm rounded-sm">
+                              Open Nested 3
+                            </Dialog.Trigger>
+                            <Dialog.Panel className="bg-blue-50 border border-blue-300 shadow-2xl m-auto rounded-lg p-4 max-w-xs max-h-fit backdrop:bg-transparent">
+                              <div className="space-y-3">
+                                <Dialog.Title className="text-lg font-bold">
+                                  Nested Dialog 3
+                                </Dialog.Title>
+                                <Dialog.Description className="text-sm">
+                                  This is the third nested dialog.
+                                </Dialog.Description>
+                                <Dialog.Close className="px-2 py-1 text-xs bg-blue-600 text-white rounded-sm hover:bg-blue-700">
+                                  Close Nested 3
+                                </Dialog.Close>
+                              </div>
+                            </Dialog.Panel>
+                          </Dialog.Root>
+                          <Dialog.Close className="px-2 py-1 text-xs bg-red-600 text-white rounded-sm hover:bg-red-700">
+                            Close Nested 1
+                          </Dialog.Close>
+                        </div>
+                      </Dialog.Panel>
+                    </Dialog.Root>
+
+                    {/* Nested Dialog 2 */}
+                    <Dialog.Root modal dismissable>
+                      <Dialog.Trigger className="bg-green-500 text-white px-3 py-1 text-sm rounded-sm">
+                        Open Nested 2
+                      </Dialog.Trigger>
+                      <Dialog.Panel className="bg-green-50 border border-green-300 shadow-2xl m-auto rounded-lg p-4 max-w-xs max-h-fit backdrop:bg-transparent">
+                        <div className="space-y-3">
+                          <Dialog.Title className="text-lg font-bold">
+                            Nested Dialog 2
+                          </Dialog.Title>
+                          <Dialog.Description className="text-sm">
+                            This is the second nested dialog.
+                          </Dialog.Description>
+                          <Dialog.Close className="px-2 py-1 text-xs bg-green-600 text-white rounded-sm hover:bg-green-700">
+                            Close Nested 2
+                          </Dialog.Close>
+                        </div>
+                      </Dialog.Panel>
+                    </Dialog.Root>
+
+                    {/* Nested Dialog 3 */}
+                    <Dialog.Root modal dismissable>
+                      <Dialog.Trigger className="bg-blue-500 text-white px-3 py-1 text-sm rounded-sm">
+                        Open Nested 3
+                      </Dialog.Trigger>
+                      <Dialog.Panel className="bg-blue-50 border border-blue-300 shadow-2xl m-auto rounded-lg p-4 max-w-xs max-h-fit backdrop:bg-transparent">
+                        <div className="space-y-3">
+                          <Dialog.Title className="text-lg font-bold">
+                            Nested Dialog 3
+                          </Dialog.Title>
+                          <Dialog.Description className="text-sm">
+                            This is the third nested dialog.
+                          </Dialog.Description>
+                          <Dialog.Close className="px-2 py-1 text-xs bg-blue-600 text-white rounded-sm hover:bg-blue-700">
+                            Close Nested 3
+                          </Dialog.Close>
+                        </div>
+                      </Dialog.Panel>
+                    </Dialog.Root>
+                  </div>
+
+                  <div className="flex gap-2 justify-end mt-4">
+                    <Dialog.Close className="px-3 py-1 text-sm bg-red-600 text-white rounded-sm hover:bg-red-700">
                       Close Parent
                     </Dialog.Close>
                   </div>

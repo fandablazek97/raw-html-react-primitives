@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { createContext, SyntheticEvent, useContext } from "react";
 import { useId } from "../internal/use-id";
 import type { DialogOptions } from "../internal/use-dialog-api";
 import { useDialog } from "./use-dialog";
@@ -125,10 +125,19 @@ export function DialogTrigger({
 
 export function DialogPanel({
   children,
+  onClose,
   onClick,
   ...props
 }: React.ComponentProps<"dialog">) {
   const { dialogProps, dismissable, closeDialog } = useDialogRootContext();
+
+  function handleEscapeClose(event: SyntheticEvent<HTMLDialogElement>) {
+    const dialog = event.currentTarget as HTMLDialogElement;
+
+    closeDialog(dialog.returnValue);
+
+    event.stopPropagation();
+  }
 
   function handleClose(event: React.MouseEvent<HTMLDialogElement>) {
     if (!dismissable) return;
@@ -159,6 +168,10 @@ export function DialogPanel({
     <dialog
       {...props}
       {...dialogProps}
+      onClose={(e) => {
+        onClose?.(e);
+        handleEscapeClose(e);
+      }}
       onClick={(e) => {
         onClick?.(e);
         handleClose(e);
