@@ -5,9 +5,11 @@ import { scrollLock } from "../internal/scroll-lock";
 
 export function useDialog({
   dialogId,
+  isNested = false,
   modal = true,
 }: {
   dialogId: string;
+  isNested: boolean;
   modal?: boolean;
 }) {
   const {
@@ -24,7 +26,9 @@ export function useDialog({
 
   function showDialog() {
     if (modal) {
-      scrollLock.lock();
+      if (!isNested) {
+        scrollLock.lock();
+      }
       nativeShowModalDialog();
     } else {
       nativeShowDialog();
@@ -32,7 +36,7 @@ export function useDialog({
   }
 
   function closeDialog(returnValue?: string) {
-    if (modal) {
+    if (modal && !isNested) {
       scrollLock.unlock();
     }
     nativeCloseDialog(returnValue);

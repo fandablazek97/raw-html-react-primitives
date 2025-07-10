@@ -1,7 +1,7 @@
 import { isBrowser } from "./dom";
 import { isWebKit, isIOS } from "./platform";
 
-let locks = 0;
+let isLocked = false;
 let scrollPosition = { x: 0, y: 0 };
 let previousBodyPaddingRight = "";
 let previousBodyOverflow = "";
@@ -39,7 +39,7 @@ function restoreScrollPosition() {
 }
 
 function lockScroll() {
-  if (!isBrowser()) return;
+  if (!isBrowser() || isLocked) return;
 
   const doc = document.documentElement;
   const body = document.body;
@@ -55,11 +55,7 @@ function lockScroll() {
     return;
   }
 
-  // Increment lock count
-  locks++;
-
-  // If already locked, just increment the counter
-  if (locks > 1) return;
+  isLocked = true;
 
   // Save current scroll position
   saveScrollPosition();
@@ -89,21 +85,14 @@ function lockScroll() {
 }
 
 function unlockScroll() {
-  if (!isBrowser()) return;
+  if (!isBrowser() || !isLocked) return;
 
   const doc = document.documentElement;
   const body = document.body;
 
   if (!doc || !body) return;
 
-  // Decrement lock count
-  locks--;
-
-  // If there are still locks active, don't unlock
-  if (locks > 0) return;
-
-  // Ensure we don't go below 0
-  locks = 0;
+  isLocked = false;
 
   // Restore body styles
   body.style.paddingRight = previousBodyPaddingRight;
@@ -123,11 +112,11 @@ function unlockScroll() {
 }
 
 function isScrollLocked() {
-  return locks > 0;
+  return isLocked;
 }
 
 function reset() {
-  locks = 0;
+  isLocked = false;
   scrollPosition = { x: 0, y: 0 };
   previousBodyPaddingRight = "";
   previousBodyOverflow = "";

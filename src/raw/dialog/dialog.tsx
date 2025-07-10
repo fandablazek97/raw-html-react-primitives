@@ -21,6 +21,7 @@ type DialogRootContextType = {
     "aria-labelledby": string;
     "aria-describedby": string;
   };
+  isNested: boolean;
   modal: boolean;
   dismissable: boolean;
 };
@@ -28,6 +29,8 @@ type DialogRootContextType = {
 const DialogRootContext = createContext<DialogRootContextType | undefined>(
   undefined,
 );
+
+const NestedDialogContext = createContext<boolean>(false);
 
 function useDialogRootContext() {
   const context = useContext(DialogRootContext);
@@ -52,6 +55,8 @@ export function DialogRoot({
   dismissable?: boolean;
   dialogId?: string;
 }) {
+  const isNested = useContext(NestedDialogContext);
+
   const id = useId("raw-ui-dialog-");
   const titleId = useId("raw-ui-dialog-title-");
   const descriptionId = useId("raw-ui-dialog-description-");
@@ -66,6 +71,7 @@ export function DialogRoot({
     toggleDialog,
   } = useDialog({
     dialogId: propDialogId || id,
+    isNested,
     modal,
   });
 
@@ -85,11 +91,14 @@ export function DialogRoot({
           "aria-labelledby": titleId,
           "aria-describedby": descriptionId,
         },
+        isNested,
         modal,
         dismissable,
       }}
     >
-      {children}
+      <NestedDialogContext.Provider value={true}>
+        {children}
+      </NestedDialogContext.Provider>
     </DialogRootContext.Provider>
   );
 }
