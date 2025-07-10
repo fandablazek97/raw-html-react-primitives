@@ -29,7 +29,7 @@ export default function Home() {
 
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">New Dialog Component</h3>
-            <Dialog.Root modal>
+            <Dialog.Root>
               <Dialog.Trigger className="bg-green-600 text-white px-4 py-2 rounded-sm">
                 Open Modal Dialog (long content)
               </Dialog.Trigger>
@@ -126,7 +126,7 @@ export default function Home() {
               <Dialog.Trigger className="bg-indigo-600 text-white px-4 py-2 rounded-sm">
                 Open Parent Dialog
               </Dialog.Trigger>
-              <Dialog.Panel className="bg-white border border-gray-300 shadow-2xl m-auto rounded-xl p-6 max-w-lg max-h-fit">
+              <Dialog.Panel className="bg-white border border-gray-300 shadow-2xl m-auto rounded-xl p-6 max-w-lg max-h-fit transition-all duration-300 data-nested-dialog-open:scale-75 data-nested-dialog-open:opacity-100">
                 <div className="space-y-4">
                   <Dialog.Title className="text-xl font-bold">
                     Parent Dialog
@@ -141,7 +141,7 @@ export default function Home() {
                     <Dialog.Trigger className="bg-indigo-500 text-white px-3 py-1 text-sm rounded-sm">
                       Open Nested Dialog
                     </Dialog.Trigger>
-                    <Dialog.Panel className="bg-yellow-50 border border-yellow-300 shadow-2xl m-auto rounded-lg p-4 max-w-sm max-h-fit backdrop:bg-transparent">
+                    <Dialog.Panel className="bg-yellow-50 border border-yellow-300 shadow-2xl m-auto rounded-lg p-4 max-w-sm max-h-fit backdrop:bg-transparent transition-all duration-300">
                       <div className="space-y-3">
                         <Dialog.Title className="text-lg font-bold">
                           Nested Dialog

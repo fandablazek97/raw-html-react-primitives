@@ -129,7 +129,8 @@ export function DialogPanel({
   onClick,
   ...props
 }: React.ComponentProps<"dialog">) {
-  const { dialogProps, dismissable, closeDialog } = useDialogRootContext();
+  const { dialogProps, dismissable, closeDialog, isNested } =
+    useDialogRootContext();
 
   function handleEscapeClose(event: SyntheticEvent<HTMLDialogElement>) {
     const dialog = event.currentTarget as HTMLDialogElement;
@@ -176,6 +177,7 @@ export function DialogPanel({
         onClick?.(e);
         handleClose(e);
       }}
+      data-nested={isNested ? "true" : undefined}
     >
       {children}
     </dialog>
@@ -216,7 +218,7 @@ export function DialogClose({
 }: React.ComponentProps<"button"> & {
   returnValue?: string;
 }) {
-  const { closeDialog, dialogId } = useDialogRootContext();
+  const { closeDialog } = useDialogRootContext();
 
   return (
     <button
