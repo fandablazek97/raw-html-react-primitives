@@ -1,48 +1,15 @@
 "use client";
 
-import { createContext, SyntheticEvent, useContext } from "react";
+import { useContext } from "react";
 import { useId } from "../internal/use-id";
 import type { DialogOptions } from "../internal/use-dialog-api";
+import { chain } from "../internal/compose-event-handlers";
 import { useDialog } from "./use-dialog";
-
-type DialogRootContextType = {
-  dialogId: string;
-  titleId: string;
-  descriptionId: string;
-  showDialog: () => void;
-  showModalDialog: () => void;
-  closeDialog: (returnValue?: string) => void;
-  toggleDialog: () => void;
-  triggerProps: {
-    onClick: () => void;
-  };
-  dialogProps: {
-    id: string;
-    "aria-labelledby": string;
-    "aria-describedby": string;
-  };
-  isNested: boolean;
-  modal: boolean;
-  dismissable: boolean;
-};
-
-const DialogRootContext = createContext<DialogRootContextType | undefined>(
-  undefined,
-);
-
-const NestedDialogContext = createContext<boolean>(false);
-
-function useDialogRootContext() {
-  const context = useContext(DialogRootContext);
-
-  if (!context) {
-    throw new Error(
-      "Raw UI: DialogRootContext is missing. Dialog parts must be used within <Dialog.Root>.",
-    );
-  }
-
-  return context;
-}
+import {
+  DialogRootContext,
+  NestedDialogContext,
+  useDialogRootContext,
+} from "./dialog-context";
 
 export function DialogRoot({
   children,
@@ -69,6 +36,8 @@ export function DialogRoot({
     showModalDialog,
     closeDialog,
     toggleDialog,
+    handleEscapeClose,
+    handleBackdropClick,
   } = useDialog({
     dialogId: propDialogId || id,
     isNested,
@@ -92,8 +61,10 @@ export function DialogRoot({
           "aria-describedby": descriptionId,
         },
         isNested,
-        modal,
+        isModal: modal,
         dismissable,
+        handleEscapeClose,
+        handleBackdropClick,
       }}
     >
       <NestedDialogContext.Provider value={true}>
@@ -111,13 +82,7 @@ export function DialogTrigger({
   const { triggerProps } = useDialogRootContext();
 
   return (
-    <button
-      {...props}
-      onClick={(e) => {
-        onClick?.(e);
-        triggerProps.onClick();
-      }}
-    >
+    <button {...props} onClick={chain(onClick, triggerProps.onClick)}>
       {children}
     </button>
   );
@@ -129,54 +94,20 @@ export function DialogPanel({
   onClick,
   ...props
 }: React.ComponentProps<"dialog">) {
-  const { dialogProps, dismissable, closeDialog, isNested } =
-    useDialogRootContext();
-
-  function handleEscapeClose(event: SyntheticEvent<HTMLDialogElement>) {
-    const dialog = event.currentTarget as HTMLDialogElement;
-
-    closeDialog(dialog.returnValue);
-
-    event.stopPropagation();
-  }
-
-  function handleClose(event: React.MouseEvent<HTMLDialogElement>) {
-    if (!dismissable) return;
-
-    const dialog = event.currentTarget;
-
-    // Fixed bug: Prevent closing if the dialog is already closed.
-    if (!dialog.open) {
-      return;
-    }
-
-    const rect = dialog.getBoundingClientRect();
-
-    const isInDialog =
-      rect.top <= event.clientY &&
-      event.clientY <= rect.top + rect.height &&
-      rect.left <= event.clientX &&
-      event.clientX <= rect.left + rect.width;
-
-    if (!isInDialog) {
-      closeDialog();
-      // Prevents event propagation to parent elements
-      event.stopPropagation();
-    }
-  }
+  const {
+    dialogProps,
+    dismissable,
+    isNested,
+    handleEscapeClose,
+    handleBackdropClick,
+  } = useDialogRootContext();
 
   return (
     <dialog
       {...props}
       {...dialogProps}
-      onClose={(e) => {
-        onClose?.(e);
-        handleEscapeClose(e);
-      }}
-      onClick={(e) => {
-        onClick?.(e);
-        handleClose(e);
-      }}
+      onClose={chain(onClose, handleEscapeClose)}
+      onClick={chain(onClick, (e) => handleBackdropClick(e, dismissable))}
       data-nested={isNested ? "true" : undefined}
     >
       {children}
@@ -221,13 +152,7 @@ export function DialogClose({
   const { closeDialog } = useDialogRootContext();
 
   return (
-    <button
-      {...props}
-      onClick={(e) => {
-        onClick?.(e);
-        closeDialog(returnValue);
-      }}
-    >
+    <button {...props} onClick={chain(onClick, () => closeDialog(returnValue))}>
       {children}
     </button>
   );

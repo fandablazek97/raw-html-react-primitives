@@ -12,6 +12,7 @@ export function useDialog({
   isNested: boolean;
   modal?: boolean;
 }) {
+  const isModal = modal;
   const {
     dialogId: hookDialogId,
     dialogProps,
@@ -55,7 +56,7 @@ export function useDialog({
   }
 
   function showDialog() {
-    if (!modal) {
+    if (!isModal) {
       nativeShowDialog();
       updateParentDialogState(true);
       return;
@@ -70,7 +71,7 @@ export function useDialog({
   }
 
   function closeDialog(returnValue?: string) {
-    if (modal && !isNested) {
+    if (isModal && !isNested) {
       scrollLock.unlock();
     }
 
@@ -85,6 +86,36 @@ export function useDialog({
     element.open ? closeDialog() : showDialog();
   }
 
+  function handleEscapeClose(event: React.SyntheticEvent<HTMLDialogElement>) {
+    const dialog = event.currentTarget as HTMLDialogElement;
+    closeDialog(dialog.returnValue);
+    event.stopPropagation();
+  }
+
+  function handleBackdropClick(
+    event: React.MouseEvent<HTMLDialogElement>,
+    dismissable: boolean,
+  ) {
+    if (!dismissable) return;
+
+    const dialog = event.currentTarget;
+
+    // Prevent closing if the dialog is already closed
+    if (!dialog.open) return;
+
+    const rect = dialog.getBoundingClientRect();
+    const isInDialog =
+      rect.top <= event.clientY &&
+      event.clientY <= rect.top + rect.height &&
+      rect.left <= event.clientX &&
+      event.clientX <= rect.left + rect.width;
+
+    if (!isInDialog) {
+      closeDialog();
+      event.stopPropagation();
+    }
+  }
+
   return {
     dialogId: hookDialogId,
     dialogProps,
@@ -96,5 +127,7 @@ export function useDialog({
     showModalDialog: showDialog,
     closeDialog,
     toggleDialog,
+    handleEscapeClose,
+    handleBackdropClick,
   };
 }
